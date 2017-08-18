@@ -15,13 +15,11 @@ def open_with_python(path):
         for row in content:
             print(row)
 
-
-
 def get_dataframe_file():
     """Locates phone_tracker.csv file in refs directory. Returns .csv as a
     pandas dataframe."""
 
-    pth = (f"({cwd}/refs/{tracker_file})")
+    pth = ("/users/trevorgrant/desktop/{})".format(tracker_file))
     return(pth)
 
 
