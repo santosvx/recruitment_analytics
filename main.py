@@ -52,8 +52,8 @@ def format_date_string(date_string):
 
 df = get_file_location()
 
-for i, cell in enumerate(df["Date Participant Calls"]):
-    cell = str(cell) # for some reason one of the cells was being counted as an int. Probably Simone.
-    cell = format_date_string(cell)
-    cell = get_datetime(cell)
-    print(cell)
+# for i, cell in enumerate(df["Date Participant Calls"]):
+#     cell = str(cell) # for some reason one of the cells was being counted as an int. Probably Simone.
+#     cell = format_date_string(cell)
+#     cell = get_datetime(cell)
+#     print(cell)
