@@ -4,37 +4,30 @@ import datetime as dt
 import os
 import csv
 
+import listsforrec
+
 cwd = os.getcwd()
 tracker_file = input("Please input the file name for your phone screen tracker: ")
+start_date = input("Please enter the start date time. ('mm/dd/yyyy'): ")
+end_date = input("Please enter the start date time. ('mm/dd/yyyy'): ")
 
-
-def open_with_python(path):
-    """Attempts to open the .csv and resave it in a format pandas can open."""
-
-    rows_to_write = []
-
-    with open(path, "r") as in_csv:
-        csv_read = csv.reader(in_csv, delimiter = "\t")
-
-        for row in csv_read:
-                rows_to_write.append(row)
-
-    with open(path + "'", "w") as out_csv:
-        csv_write = csv.writer(out_csv, delimiter = ",")
-
-        for row in rows_to_write:
-            csv_write.writerow(row)
-
-    return(out_csv)
+print(start_date[2:3], start_date[5:6])
 
 def get_file_location():
     """Locates phone_tracker.csv file in refs directory. Returns .csv as a
     pandas dataframe."""
 
-    pth = (f"{cwd}/phoneDbs/{tracker_file}")
-    return(pth)
+    df = pd.read_csv(f"{cwd}/phoneDbs/{tracker_file}")
+    return(df)
 
-tracker_file = get_file_location()
-tracker_file = open_with_python(tracker_file)
-df = pd.read_csv(tracker_file)
-print(df)
+def get_datetime(date_string):
+    if (date_string[2:3] == "/") and (date_string[5:6] == "/"):
+        date_time = dt.datetime.strptime(date_string, "%m/%d/%Y")
+        return(date_time)
+
+
+def get_date_parameters(df):
+    pass
+
+
+proper_format_date(start_date)
