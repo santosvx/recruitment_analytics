@@ -14,7 +14,7 @@ Type in a range of dates: e.g.: 9/16/16 - 9/15/17 and return:
 
 # of ineligible (phone screen - eligible).
 
-# of participants wh ocompleted the study.
+# of participants who completed the study.
 
 # scheduled to be run.
 
