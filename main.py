@@ -104,6 +104,9 @@ df["Final Contact"] = np.where(df["Final Call"] == None, df["Date Participant Ca
 df["Final Contact"] = pd.to_datetime(df["Final Contact"], unit='ns')
 df["Phone Screen Date"] = np.where(df["Phone screened?"] == "Yes", df["Final Call"], None)
 df["Phone Screen Date"] = pd.to_datetime(df["Phone Screen Date"], unit='ns')
+df["Eligible/Ineligible Fixed"] = np.where((df["Eligible/Ineligible"] == "Inelgible") |
+(df["Eligible/Ineligible"] == "Inelibible") | (df["Eligible/Ineligible"] == "Ineligble") |
+(df["Eligible/Ineligible"] == "Ineligible"), "Ineligible", "X")
 
 df = df.set_index(df["Phone Screen Date"])
 df = df.sort_values("Phone Screen Date")
@@ -121,19 +124,28 @@ end_index = dt_indexes.pop(-1)
 df = df.ix[start_index:end_index]
 
 df["Eligible Count"] = np.where((df["Eligible/Ineligible"] == "Eligible (HID: No)")
-| (df["Eligible/Ineligible"] == "Eligible (HID: Yes)"), 1, None)
+| (df["Eligible/Ineligible"] == "Eligible (HID: Yes)") | (df["Eligible/Ineligible"] == "Eligible"), 1, None)
 
-df["Ineligible Count"] = np.where(df["Eligible/Ineligible"] == "Ineligible", 1, None)
+df["Ineligible Count"] = np.where(df["Eligible/Ineligible Fixed"] == "Ineligible", 1, None)
+
+df["Male Eligible Count"] = np.where((df["Eligible Count"] == 1) & (df["Gender"] == "M"), 1, None)
+df["Female Eligible Count"] = np.where((df["Eligible Count"] == 1) & (df["Gender"] == "F"), 1, None)
+df["Male Ineligible Count"] = np.where((df["Ineligible Count"] == 1) & (df["Gender"] == "M"), 1, None)
+df["Female Ineligible Count"] = np.where((df["Ineligible Count"] == 1) & (df["Gender"] == "F"), 1, None)
 
 df.to_csv("there.csv")
 
 num_eligible = df["Eligible Count"].count()
+num_male_eligible = df["Male Eligible Count"].count()
+num_female_eligible = df["Female Eligible Count"].count()
 num_ineligible = df["Ineligible Count"].count()
+num_male_ineligible = df["Male Ineligible Count"].count()
+num_female_ineligible = df["Female Ineligible Count"].count()
 ineligible_reasons = df["Ineligibility Tracker_1"].value_counts()
 where_they_heard = df["Where they heard about the study"].value_counts()
+total_gender = df["Gender"].value_counts()
 
-now_now = dt.datetime.now()
-out_file = open("export_{now_now}.txt", "w")
+out_file = open("exportt_sheet.txt", "w")
 
 out_file.write("""This is an export for a phone screen tracker between the dates of
 {} and {}. \n""".format(start_index, end_index))
@@ -147,6 +159,14 @@ totl = num_ineligible + num_eligible
 per_eli = round((num_eligible / totl) * 100)
 out_file.write(f"PERCENT ELIGIBLE: {per_eli}\n")
 out_file.write(f"TOTAL PHONE SCREENS: {totl}\n")
+out_file.write("-------------------\n")
+out_file.write(f"GENDER DEMOGRAPHICS:\n")
+out_file.write(str(total_gender) + "\n")
+out_file.write("-------------------\n")
+out_file.write(f"Male Eligible: {num_male_eligible}\n")
+out_file.write(f"Female Eligible: {num_female_eligible}\n")
+out_file.write(f"Male Ineligible: {num_male_ineligible}\n")
+out_file.write(f"Female Ineligible: {num_female_ineligible}\n")
 out_file.write("-------------------\n")
 out_file.write("Reasons for ineligiblity:\n")
 out_file.write(str(ineligible_reasons) + "\n")
