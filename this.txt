@@ -1,0 +1,83 @@
+This is an export for a phone screen tracker between the dates of
+2016-09-16 00:00:00 and 2017-08-21 00:00:00. 
+-------------------
+START DATE: 2016-09-16 00:00:00
+END DATE: 2017-08-21 00:00:00
+-------------------
+NUM ELIGIBLE: 41
+NUM INELIGIBLE: 162
+PERCENT ELIGIBLE: 20.0
+TOTAL PHONE SCREENS: 203
+-------------------
+Reasons for ineligiblity:
+Metal                           25
+Medication/ Health Issues       22
+HID                             20
+Time Frame                      16
+LOC/ Too Severe                 15
+Other Study                     13
+Age                             11
+Psychiatric Conditions          10
+No longer Interested             9
+Language                         7
+Travel/ Scheduling Conflicts     4
+Depression                       4
+Alcohol Abuse                    3
+Marijuana                        3
+No contact/ Unknown              2
+No Contact/ Unknown              1
+Menstrual Cycle                  1
+Healthy Control/ No TBI          1
+Vision/ Colorblindness           1
+Name: Ineligibility Tracker_1, dtype: int64
+-------------------
+Recruitment sites:
+Campus                                          33
+EPIC                                            31
+Friend                                          28
+Tucson Weekly                                   11
+Unknown                                         10
+Other                                            9
+Coffee Shop                                      8
+Studykik                                         6
+Campus Health                                    6
+COPE                                             5
+Radio                                            4
+Facebook                                         4
+Pima                                             3
+UA Listserv (Psychology)                         3
+Psychology Building                              3
+Rec Center                                       2
+Harvill Building                                 2
+Main Student Union                               2
+Main Library                                     2
+Doctor                                           2
+Social Sciences                                  2
+Daily Wildcat                                    2
+Tucson Physical Therapy                          1
+friend                                           1
+Coffee Shop (Black Crown)                        1
+unknown                                          1
+UA Listserv (Pre-Health Club)                    1
+Psychiatry Website                               1
+Flyer (Campus)                                   1
+Wildcat Cheer Club                               1
+UA Listserv (Eller)                              1
+Miller's Surplus                                 1
+Stevie Eller Dance Theatre                       1
+UA Listserv (Pre-Health)                         1
+Marshall Building                                1
+UA Listserv (Mathematics)                        1
+UA Listserv (Molecular and Cellular Biology)     1
+Pima East                                        1
+Bike Shop                                        1
+Martial Arts Studio                              1
+The BLOC                                         1
+BUMC                                             1
+Park Student Union (PSU)                         1
+Cesar Chavez                                     1
+Big 5 Sporting Goods (Eastside)                  1
+Mt. Lemmon                                       1
+Arizona Daily Star                               1
+UA Listserv (Agriculture)                        1
+Name: Where they heard about the study, dtype: int64

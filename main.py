@@ -121,8 +121,7 @@ for row in dt_list:
 start_index = dt_indexes.pop(0)
 end_index = dt_indexes.pop(-1)
 
-print(f"START DATE: {start_index}")
-print(f"END DATE: {end_index}")
+
 
 df = df.ix[start_index:end_index]
 
@@ -135,10 +134,28 @@ df.to_csv("there.csv")
 
 num_eligible = df["Eligible Count"].count()
 num_ineligible = df["Ineligible Count"].count()
+ineligible_reasons = df["Ineligibility Tracker_1"].value_counts()
+where_they_heard = df["Where they heard about the study"].value_counts()
 
-print(f"NUM ELIGIBLE: {num_eligible}")
-print(f"NUM INELIGIBLE: {num_ineligible}")
+out_file = open("this.txt", "w")
+
+out_file.write("""This is an export for a phone screen tracker between the dates of
+{} and {}. \n""".format(start_index, end_index))
+out_file.write("-------------------\n")
+out_file.write(f"START DATE: {start_index}\n")
+out_file.write(f"END DATE: {end_index}\n")
+out_file.write("-------------------\n")
+out_file.write(f"NUM ELIGIBLE: {num_eligible}\n")
+out_file.write(f"NUM INELIGIBLE: {num_ineligible}\n")
 totl = num_ineligible + num_eligible
 per_eli = round((num_eligible / totl) * 100)
-print(f"PERFECT ELIGIBLE: {per_eli}")
-print(f"TOTAL PARTICIPANTS: {totl}")
+out_file.write(f"PERCENT ELIGIBLE: {per_eli}\n")
+out_file.write(f"TOTAL PHONE SCREENS: {totl}\n")
+out_file.write("-------------------\n")
+out_file.write("Reasons for ineligiblity:\n")
+out_file.write(str(ineligible_reasons) + "\n")
+out_file.write("-------------------\n")
+out_file.write("Recruitment sites:\n")
+out_file.write(str(where_they_heard) + "\n")
+
+out_file.close()
