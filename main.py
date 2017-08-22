@@ -7,12 +7,12 @@ import csv
 
 import listsforrec
 
-cwd = os.getcwd()
-tracker_file = input("Please input the file name for your phone screen tracker: ")
-#start_date = input("Please enter the start date time. ('mm/dd/yyyy'): ")
-#end_date = input("Please enter the start date time. ('mm/dd/yyyy'): ")
-start_date = "10/22/1990"
-end_date = "11/22/1990"
+def determine_time():
+
+    if dt.datetime.now() <= dt.datetime(2017, 9, 15):
+        return(dt.datetime.now())
+    else:
+        return(dt.datetime(2017, 9, 15))
 
 def get_file_location():
     """Locates phone_tracker.csv file in refs directory. Returns .csv as a
@@ -77,22 +77,68 @@ def format_datewecall_string(cell):
                 cell = cell[3:]
             if cell[0] == "e":
                 cell = cell[8:]
+            if cell[-1:] == "" or cell[-1:] == " ":
+                cell = cell[-1:] + "17"
         if len(cell) < 6:
             cell = "nan"
         return(cell)
     except IndexError:
         return(cell)
 
+cwd = os.getcwd()
+tracker_file = input("Please input the file name for your phone screen tracker: ")
+start_date = dt.datetime(2016, 9, 16)
+end_date = determine_time()
+
 df = get_file_location()
 
-# for cell in df["Date Participant Calls"]:
-#     cell = str(cell) # for some reason one of the cells was being counted as an int. Probably Simone.
-#     cell = format_date_string(cell)
-#     cell = get_datetime(cell)
-#     print(cell)
-
+date_time_list = []
 for i, cell in enumerate(df["Date We Call Participant"]):
     cell = format_datewecall_string(cell)
     cell = format_date_string(cell)
     cell = get_datetime(cell)
-    print(cell, i)
+    date_time_list.append(cell)
+
+df["Final Call"] = date_time_list
+
+df["Final Contact"] = np.where(df["Final Call"] == None, df["Date Participant Calls"], df["Final Call"])
+df["Final Contact"] = pd.to_datetime(df["Final Contact"], unit='ns')
+df["Phone Screen Date"] = np.where(df["Phone screened?"] == "Yes", df["Final Call"], None)
+df["Phone Screen Date"] = pd.to_datetime(df["Phone Screen Date"], unit='ns')
+
+df = df.set_index(df["Phone Screen Date"])
+df = df.sort_values("Phone Screen Date")
+
+df.to_csv("here.csv")
+
+dt_list = df["Phone Screen Date"].tolist()
+
+dt_indexes = []
+for row in dt_list:
+    if row >= start_date and row <= end_date:
+        dt_indexes.append(row)
+
+start_index = dt_indexes.pop(0)
+end_index = dt_indexes.pop(-1)
+
+print(f"START DATE: {start_index}")
+print(f"END DATE: {end_index}")
+
+df = df.ix[start_index:end_index]
+
+df["Eligible Count"] = np.where((df["Eligible/Ineligible"] == "Eligible (HID: No)")
+| (df["Eligible/Ineligible"] == "Eligible (HID: Yes)"), 1, None)
+
+df["Ineligible Count"] = np.where(df["Eligible/Ineligible"] == "Ineligible", 1, None)
+
+df.to_csv("there.csv")
+
+num_eligible = df["Eligible Count"].count()
+num_ineligible = df["Ineligible Count"].count()
+
+print(f"NUM ELIGIBLE: {num_eligible}")
+print(f"NUM INELIGIBLE: {num_ineligible}")
+totl = num_ineligible + num_eligible
+per_eli = round((num_eligible / totl) * 100)
+print(f"PERFECT ELIGIBLE: {per_eli}")
+print(f"TOTAL PARTICIPANTS: {totl}")
