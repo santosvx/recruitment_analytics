@@ -100,7 +100,6 @@ for i, cell in enumerate(df["Date We Call Participant"]):
     date_time_list.append(cell)
 
 df["Final Call"] = date_time_list
-
 df["Final Contact"] = np.where(df["Final Call"] == None, df["Date Participant Calls"], df["Final Call"])
 df["Final Contact"] = pd.to_datetime(df["Final Contact"], unit='ns')
 df["Phone Screen Date"] = np.where(df["Phone screened?"] == "Yes", df["Final Call"], None)
@@ -108,8 +107,6 @@ df["Phone Screen Date"] = pd.to_datetime(df["Phone Screen Date"], unit='ns')
 
 df = df.set_index(df["Phone Screen Date"])
 df = df.sort_values("Phone Screen Date")
-
-df.to_csv("here.csv")
 
 dt_list = df["Phone Screen Date"].tolist()
 
@@ -120,8 +117,6 @@ for row in dt_list:
 
 start_index = dt_indexes.pop(0)
 end_index = dt_indexes.pop(-1)
-
-
 
 df = df.ix[start_index:end_index]
 
@@ -137,7 +132,8 @@ num_ineligible = df["Ineligible Count"].count()
 ineligible_reasons = df["Ineligibility Tracker_1"].value_counts()
 where_they_heard = df["Where they heard about the study"].value_counts()
 
-out_file = open("this.txt", "w")
+now_now = dt.datetime.now()
+out_file = open("export_{now_now}.txt", "w")
 
 out_file.write("""This is an export for a phone screen tracker between the dates of
 {} and {}. \n""".format(start_index, end_index))
