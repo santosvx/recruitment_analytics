@@ -19,3 +19,10 @@ Type in a range of dates: e.g.: 9/16/16 - 9/15/17 and return:
 CHECK RECRUITMENT METHODS:
 
 # Return top three most successful recuitment sites. - DONE
+
+
+TO USER:
+To run the program you will want to create a directory in this directory called "PhoneDBs". 
+The script will export a file in this directory named export_sheet.txt - this is a text file that has all of the needed information.
+
+
