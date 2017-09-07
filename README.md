@@ -23,6 +23,5 @@ CHECK RECRUITMENT METHODS:
 
 TO USER:
 To run the program you will want to create a directory in this directory called "PhoneDBs". 
+Move the file you want to process into that directory before running the script. When the script prompts you to input a file name for your phone screen tracker, enter just the file name (including extention). DO NOT include the rest of the file path as script already knows where to look for the file. 
 The script will export a file in this directory named export_sheet.txt - this is a text file that has all of the needed information.
-
-
