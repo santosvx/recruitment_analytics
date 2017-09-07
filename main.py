@@ -1,11 +1,28 @@
 import pandas as pd
 import numpy as np
+import codecs
 import math
 import datetime as dt
 import os
 import csv
 
 import listsforrec
+
+def fix_unicode(tracker_file):
+
+    with codecs.open(f"{cwd}/PhoneDBs/{tracker_file}", "r",encoding='utf-8', errors='ignore') as fdata:
+        file_lines = csv.reader(fdata, delimiter=',')
+
+        write_lines = []
+
+        for row in file_lines:
+            write_lines.append(row)
+
+    with open(f"{cwd}/PhoneDBs/{tracker_file}", "w") as out_csv:
+        writer = csv.writer(out_csv)
+
+        for row in write_lines:
+            writer.writerow(row)
 
 def determine_time():
 
@@ -87,6 +104,8 @@ def format_datewecall_string(cell):
 
 cwd = os.getcwd()
 tracker_file = input("Please input the file name for your phone screen tracker: ")
+fix_unicode(tracker_file)
+
 start_date = dt.datetime(2016, 9, 16)
 end_date = determine_time()
 
@@ -104,9 +123,9 @@ df["Final Contact"] = np.where(df["Final Call"] == None, df["Date Participant Ca
 df["Final Contact"] = pd.to_datetime(df["Final Contact"], unit='ns')
 df["Phone Screen Date"] = np.where(df["Phone screened?"] == "Yes", df["Final Call"], None)
 df["Phone Screen Date"] = pd.to_datetime(df["Phone Screen Date"], unit='ns')
-df["Eligible/Ineligible Fixed"] = np.where((df["Eligible/Ineligible"] == "Inelgible") |
-(df["Eligible/Ineligible"] == "Inelibible") | (df["Eligible/Ineligible"] == "Ineligble") |
-(df["Eligible/Ineligible"] == "Ineligible"), "Ineligible", "X")
+df["Status Fixed"] = np.where((df["Status"] == "Inelgible") |
+(df["Status"] == "Inelibible") | (df["Status"] == "Ineligble") |
+(df["Status"] == "Ineligible"), "Ineligible", "X")
 
 df = df.set_index(df["Phone Screen Date"])
 df = df.sort_values("Phone Screen Date")
@@ -123,10 +142,10 @@ end_index = dt_indexes.pop(-1)
 
 df = df.ix[start_index:end_index]
 
-df["Eligible Count"] = np.where((df["Eligible/Ineligible"] == "Eligible (HID: No)")
-| (df["Eligible/Ineligible"] == "Eligible (HID: Yes)") | (df["Eligible/Ineligible"] == "Eligible"), 1, None)
+df["Eligible Count"] = np.where((df["Status"] == "Eligible (HID: No)")
+| (df["Status"] == "Eligible (HID: Yes)") | (df["Status"] == "Eligible"), 1, None)
 
-df["Ineligible Count"] = np.where(df["Eligible/Ineligible Fixed"] == "Ineligible", 1, None)
+df["Ineligible Count"] = np.where(df["Status Fixed"] == "Ineligible", 1, None)
 
 df["Male Eligible Count"] = np.where((df["Eligible Count"] == 1) & (df["Gender"] == "M"), 1, None)
 df["Female Eligible Count"] = np.where((df["Eligible Count"] == 1) & (df["Gender"] == "F"), 1, None)
@@ -145,7 +164,7 @@ ineligible_reasons = df["Ineligibility Tracker_1"].value_counts()
 where_they_heard = df["Where they heard about the study"].value_counts()
 total_gender = df["Gender"].value_counts()
 
-out_file = open("exportt_sheet.txt", "w")
+out_file = open("export_sheet.txt", "w")
 
 out_file.write("""This is an export for a phone screen tracker between the dates of
 {} and {}. \n""".format(start_index, end_index))
